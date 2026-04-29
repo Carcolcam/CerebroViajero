@@ -561,6 +561,14 @@
                 </div>
             </div>
         </div>
+
+        <!-- SECCIÓN INTELIGENCIA -->
+        <div id="section-inteligencia" style="display: none;">
+            <div class="section-title"><i data-lucide="brain" style="width: 16px;"></i> SALA DE INTELIGENCIA (HILOS)</div>
+            <div id="lista-hilos" style="display: flex; flex-direction: column; gap: 15px;">
+                <!-- Cargado por JS -->
+            </div>
+        </div>
     </div>
 
     <!-- Modal de Reclamación -->
@@ -592,10 +600,13 @@
     </div>
 
     <!-- Bottom Nav (Tab Bar Premium para móviles) -->
-    <nav class="bottom-nav">
-        <a href="#top" class="nav-item active" onclick="setActive(this)">
+        <a href="#top" class="nav-item active" onclick="showSection('panel', this)">
             <i data-lucide="layout-dashboard" style="width: 20px;"></i>
             <span class="nav-label">Hoy</span>
+        </a>
+        <a href="javascript:void(0)" class="nav-item" onclick="showSection('inteligencia', this)">
+            <i data-lucide="brain" style="width: 20px;"></i>
+            <span class="nav-label">Intel</span>
         </a>
         <a href="index.html" class="nav-item">
             <i data-lucide="calendar-days" style="width: 20px;"></i>
@@ -976,71 +987,111 @@
             document.getElementById('threadModal').style.display = 'none';
         }
 
-        function setActive(el) {
+        function showSection(sectionId, el) {
+            // Navegación
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
-        }
+            if(el) el.classList.add('active');
 
-        async function triggerDriveSync() {
-            const btn = event.currentTarget;
-            const originalHtml = btn.innerHTML;
-            btn.innerHTML = '<i data-lucide="refresh-cw" class="syncing" style="width:14px;"></i> Sincronizando...';
-            lucide.createIcons();
-            
-            console.log("Sentinel: Disparando vigilancia de Drive (Opción C)...");
-            // Simulamos la llamada al vigilante_drive.py
-            setTimeout(async () => {
-                await syncData();
-                btn.innerHTML = originalHtml;
-                lucide.createIcons();
-                alert("Sincronización con Drive finalizada. Los nuevos documentos han sido procesados.");
-            }, 3000);
-        }
-
-        loadCommandCenter();
-
-        // Gestión de estado de conexión "Health Status"
-        async function updateConnectionStatus() {
-            const statusIndicator = document.getElementById('connectionStatus');
-            const statusLabel = document.getElementById('connectionLabel');
-            
-            if (!navigator.onLine) {
-                statusIndicator.className = 'connection-indicator connection-offline';
-                statusLabel.innerText = "Modo Blindado";
-                return;
+            // Visibilidad
+            if (sectionId === 'panel') {
+                document.querySelector('.dashboard-grid').style.display = 'grid';
+                document.getElementById('section-inteligencia').style.display = 'none';
+                document.getElementById('integrityContainer').style.display = 'block';
+            } else if (sectionId === 'inteligencia') {
+                document.querySelector('.dashboard-grid').style.display = 'none';
+                document.getElementById('section-inteligencia').style.display = 'block';
+                document.getElementById('integrityContainer').style.display = 'none';
+                cargarInteligencia();
             }
+            window.scrollTo(0,0);
+        }
 
+        async function cargarInteligencia() {
+            const container = document.getElementById('lista-hilos');
+            container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-dim);">Sincronizando hilos...</div>';
+            
             try {
-                // Verificar si la API/JSON es accesible
-                const start = Date.now();
-                const res = await fetch('itinerario_maestro.json', { method: 'HEAD', cache: 'no-cache' });
-                const latencia = Date.now() - start;
-
-                if (res.ok) {
-                    statusIndicator.className = 'connection-indicator live';
-                    statusLabel.innerText = latencia < 200 ? "Enlace Directo" : "Radar Estable";
-                } else {
-                    statusIndicator.className = 'connection-indicator connection-error';
-                    statusLabel.innerText = "Fallo de Sistema";
+                const res = await fetch('Conversaciones/index_hilos.json');
+                const hilos = await res.json();
+                
+                if (hilos.length === 0) {
+                    container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-dim);">No se han detectado conversaciones relevantes.</div>';
+                    return;
                 }
+
+                container.innerHTML = '';
+                hilos.forEach(h => {
+                    const card = document.createElement('div');
+                    card.className = 'action-container';
+                    card.style.cursor = 'pointer';
+                    card.onclick = () => abrirHilo(h.archivo);
+                    card.innerHTML = `
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <div style="width:32px; height:32px; border-radius:50%; background:rgba(0,242,255,0.1); display:flex; align-items:center; justify-content:center; color:var(--accent-cyan);">
+                                    <i data-lucide="mail"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight:600; font-size:15px;">${h.titulo}</div>
+                                    <div style="font-size:12px; color:var(--text-dim);">${h.mensajes} mensajes en el hilo</div>
+                                </div>
+                            </div>
+                            <i data-lucide="chevron-right" style="color:var(--text-dim); width:16px;"></i>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+                lucide.createIcons();
             } catch (e) {
-                statusIndicator.className = 'connection-indicator connection-error';
-                statusLabel.innerText = "Error Sincro";
+                container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--accent-red);">Error al conectar con la base de datos de hilos.</div>';
             }
         }
 
-        window.addEventListener('online', updateConnectionStatus);
-        window.addEventListener('offline', updateConnectionStatus);
-        updateConnectionStatus();
+        function abrirHilo(archivo) {
+            const modal = document.getElementById('threadModal');
+            const container = document.getElementById('threadBody');
+            const titulo = document.getElementById('threadTitle');
+            const subtitle = document.getElementById('threadSubtitle');
+            
+            titulo.innerText = "Conectando...";
+            subtitle.innerText = "Recuperando hilo de Hotmail...";
+            container.innerHTML = '<div style="text-align:center; padding:40px;"><i data-lucide="refresh-cw" class="syncing"></i></div>';
+            modal.style.display = 'flex';
+            lucide.createIcons();
 
-        // Registro del Service Worker para Modo Offline Pro
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('service-worker.js')
-                    .then(reg => console.log('Sentinel Shield Active', reg))
-                    .catch(err => console.log('Shield Offline', err));
-            });
+            fetch(`Conversaciones/${archivo}`)
+                .then(r => r.json())
+                .then(data => {
+                    titulo.innerText = data[0].subject;
+                    subtitle.innerText = `${data.length} Intercambios detectados`;
+                    container.innerHTML = '';
+                    
+                    data.forEach(msg => {
+                        const isSent = msg.folder.includes("Sent");
+                        const item = document.createElement('div');
+                        item.className = 'thread-item';
+                        item.innerHTML = `
+                            <div class="thread-icon" style="border-color:${isSent ? '#3498db' : 'var(--accent-cyan)'}">
+                                <i data-lucide="${isSent ? 'send' : 'mail'}" style="width:12px;"></i>
+                            </div>
+                            <div class="thread-content" style="${isSent ? 'background:rgba(52, 152, 219, 0.05);' : ''}">
+                                <div class="thread-meta">
+                                    <span style="color:${isSent ? '#3498db' : 'var(--accent-cyan)'}">${isSent ? 'YO' : 'PROVEEDOR'}</span>
+                                    <span>${msg.date}</span>
+                                </div>
+                                <div class="thread-msg">${msg.body}</div>
+                            </div>
+                        `;
+                        container.appendChild(item);
+                    });
+                    lucide.createIcons();
+                });
         }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCommandCenter();
+        });
     </script>
 </body>
 </html>

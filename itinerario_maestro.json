@@ -1,58 +1,20 @@
 {
     "metadata": {
-        "ultima_actualizacion": "2026-04-29T19:42:31.158523",
+        "ultima_actualizacion": "2026-04-29T20:13:42.994751",
         "estado_radar": "EFFICIENT_MODE",
-        "huecos_logicos": [
-            {
-                "tipo": "HUECO_ALOJAMIENTO",
-                "msj": "Noche al raso: Tienes 4 noches sin alojamiento cubierto en Nueva York.",
-                "detalles": {
-                    "desde": "2026-06-01 a las 14:00",
-                    "hasta": "2026-06-05 a las 09:00",
-                    "ciudad": "Nueva York",
-                    "noches": 4
-                },
-                "pnr_relacionado": "MNYC11"
-            }
-        ],
-        "total_events": 2,
+        "huecos_logicos": [],
+        "total_events": 1,
         "source": "Generado autonomamente desde la ingesta de PDFs + Live API"
     },
     "itinerary": [
         {
-            "id": "MNYC11",
+            "id": "TERESA",
             "type": "flight",
-            "date": "2026-06-01",
-            "from_city": "Madrid",
-            "to_city": "Nueva York",
-            "dep_time": "10:00",
-            "arr_time": "14:00",
+            "date": "2026-08-22",
+            "provider": "Agencia",
+            "title": "Real",
             "status": "CONFIRMED",
-            "provider": "Email",
-            "title": "Confirmacion de Vuelo Iberia MAD-JFK PNR: MNYC11",
-            "pnr": "MNYC11",
-            "checkout": null,
-            "friction_logistics": {
-                "origin_friction_min": 150,
-                "destination_friction_min": 45,
-                "inmigration_buffer": 60,
-                "traffic_risk": "LOW",
-                "traffic_delay_min": 0
-            }
-        },
-        {
-            "id": "DLAX33",
-            "type": "flight",
-            "date": "2026-06-05",
-            "from_city": "Nueva York",
-            "to_city": "Los Angeles",
-            "dep_time": "09:00",
-            "arr_time": "12:00",
-            "status": "CONFIRMED",
-            "provider": "Email",
-            "title": "Vuelo Delta JFK-LAX PNR: DLAX33",
-            "pnr": "DLAX33",
-            "checkout": null,
+            "refund_status": "NONE",
             "friction_logistics": {
                 "origin_friction_min": 150,
                 "destination_friction_min": 45,
