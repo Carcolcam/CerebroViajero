@@ -1,0 +1,35 @@
+name: Integrar Reserva Automática
+
+on:
+  workflow_dispatch:
+    inputs:
+      alert_id:
+        description: 'ID de la alerta a integrar'
+        required: true
+
+jobs:
+  integrar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout repositorio
+      uses: actions/checkout@v3
+
+    - name: Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Ejecutar integración
+      run: |
+        python integrar_hotel.py ${{ github.event.inputs.alert_id }}
+
+    - name: Guardar cambios
+      run: |
+        git config --global user.name "CerebroViajero Bot"
+        git config --global user.email "bot@cerebroviajero.com"
+        git add itinerario_maestro.json alertas_sentinel.json
+        git commit -m "♻️ INTEGRACIÓN: Nueva reserva inyectada desde el Dashboard" || echo "No hay cambios"
+        git push

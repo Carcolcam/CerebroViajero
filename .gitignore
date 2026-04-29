@@ -1,0 +1,24 @@
+# Secretos y Autenticación (¡CRÍTICO!)
+credentials.json
+token_*.json
+token_cache.bin
+.env
+
+# Carpetas de Trabajo y Desarrollo
+scratch/
+backups/
+backups_pdf_test/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+
+# Sistema y Otros
+.DS_Store
+Thumbs.db
+temp/
+artifacts/
+*.log

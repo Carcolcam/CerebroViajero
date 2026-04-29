@@ -1,0 +1,45 @@
+{
+  "spots": [
+    {
+      "id": "bunaken",
+      "name": "Parque Nacional Bunaken",
+      "best_time": "Septiembre (Mejor visibilidad y menos viento)",
+      "tide_tip": "Snorkel ideal en marea alta muerta (slack high tide) para evitar sedimentos.",
+      "fauna": ["Tortugas verdes", "Peces payaso", "Corales de pared", "Delfines (frecuentes en el trayecto)"],
+      "visibility": "20-35 metros",
+      "danger_level": "Bajo (Cuidado con corrientes en las puntas de la pared)"
+    },
+    {
+      "id": "wakatobi",
+      "name": "Wakatobi (Wangi-Wangi & Hoga)",
+      "best_time": "Agosto/Septiembre (Clima protegido, muy fiable)",
+      "tide_tip": "Marea alta para entrar fácilmente sobre el arrecife desde la playa.",
+      "fauna": ["Caballitos de mar pigmeos (macro)", "Bancos de barracudas", "Corales prístinos"],
+      "visibility": "30-50 metros (Excepcional)",
+      "danger_level": "Muy Bajo"
+    },
+    {
+      "id": "bangka",
+      "name": "Isla Bangka (Norte de Sulawesi)",
+      "best_time": "Septiembre (Transición post-monzón)",
+      "tide_tip": "Consultar con el resort; las corrientes pueden ser fuertes entre islas.",
+      "fauna": ["Dugongos (avistamientos raros pero posibles)", "Nudibranquios", "Tiburones de arrecife"],
+      "visibility": "20-30 metros",
+      "danger_level": "Medio (Corrientes variables)"
+    },
+    {
+      "id": "phuket_west",
+      "name": "Phuket (Kata/Karon)",
+      "best_time": "Poco ideal en Agosto/Septiembre (Monzón del Suroeste)",
+      "tide_tip": "SOLO snorkel en días de bandera verde. Evitar con bandera roja (corrientes de resaca).",
+      "fauna": ["Peces loro", "Rayas pequeñas", "Morenas"],
+      "visibility": "5-15 metros (Variable por lluvias)",
+      "danger_level": "Alto (Resacas fuertes en época de monzón)"
+    }
+  ],
+  "general_tips": [
+    "La mejor visibilidad suele coincidir con la marea alta.",
+    "Las fases de cuarto creciente/menguante tienen mareas más suaves y menos corrientes.",
+    "En Phuket, si el mar está movido, buscar tours a Racha Islands o Coral Island (más protegidas)."
+  ]
+}

@@ -1,0 +1,50 @@
+[
+    {
+        "id": "wakatobi_1",
+        "location": "Wakatobi",
+        "title": "Isla Hoga",
+        "desc": "Alternativa tranquila al resort principal. Arrecifes vírgenes y ambiente 'back-to-nature'. Ideal para desconectar.",
+        "icon": "fa-palm-tree",
+        "type": "Naturaleza"
+    },
+    {
+        "id": "wakatobi_2",
+        "location": "Wakatobi",
+        "title": "Sombu Dive (Wangi-Wangi)",
+        "desc": "Favorito local. El muelle ofrece acceso fácil a paredes de coral increíbles. El mejor lugar para ver el atardecer.",
+        "icon": "fa-mask-snorkel",
+        "type": "Buceo"
+    },
+    {
+        "id": "manado_1",
+        "location": "Manado",
+        "title": "RM Bakar Rica",
+        "desc": "Prueba el 'Rahang Tuna' (quijada de atún). Es el lugar más auténtico según los locales. Ve temprano antes del almuerzo.",
+        "icon": "fa-utensils",
+        "type": "Gastronomía"
+    },
+    {
+        "id": "manado_2",
+        "location": "Manado",
+        "title": "Ko Petrus",
+        "desc": "Escondido en un callejón. Famoso por su 'Soto Rusuk Ba' (sopa de costilla de cerdo). Una verdadera joya oculta.",
+        "icon": "fa-bowl-food",
+        "type": "Gastronomía"
+    },
+    {
+        "id": "phuket_1",
+        "location": "Phuket",
+        "title": "Banana Beach",
+        "desc": "Cala en forma de media luna entre Bang Tao y Naithon. Requiere una caminata por la selva, lo que la mantiene privada.",
+        "icon": "fa-umbrella-beach",
+        "type": "Playa"
+    },
+    {
+        "id": "phuket_2",
+        "location": "Phuket",
+        "title": "Moo Hong en Old Town",
+        "desc": "Panceta de cerdo braseada que se derrite en la boca. Busca restaurantes como 'One Chun' para la receta tradicional.",
+        "icon": "fa-hotdog",
+        "type": "Gastronomía"
+    }
+]

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CerebroViajero - KIT OFFLINE</title>
+    <style>
+        :root {
+            --bg: #0b0e14;
+            --card-bg: #161b22;
+            --text: #c9d1d9;
+            --accent: #ff4757;
+            --vuelo: #58a6ff;
+            --hotel: #3fb950;
+            --emergency: #f85149;
+        }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); padding: 15px; margin: 0; line-height: 1.4; }
+        h1 { color: #fff; font-size: 22px; margin-bottom: 5px; }
+        h2 { color: var(--accent); font-size: 16px; margin-top: 25px; border-bottom: 1px solid #30363d; padding-bottom: 5px; }
+        .card { background: var(--card-bg); border-radius: 8px; padding: 12px; margin-bottom: 12px; border: 1px solid #30363d; }
+        .vuelo { border-left: 4px solid var(--vuelo); }
+        .hotel { border-left: 4px solid var(--hotel); }
+        .emergency-card { border-left: 4px solid var(--emergency); background: #2a1215; }
+        .title { font-weight: bold; display: block; color: #fff; font-size: 15px; }
+        .meta { font-size: 12px; color: #8b949e; margin-top: 4px; }
+        .tag { font-size: 10px; padding: 2px 6px; border-radius: 10px; background: #30363d; margin-right: 5px; }
+        .pnr { font-family: monospace; color: var(--vuelo); font-weight: bold; }
+        .print-btn { background: var(--accent); color: #fff; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; margin-bottom: 20px; }
+        @media print { .print-btn { display: none; } }
+    </style>
+</head>
+<body>
+    <h1>🛰️ KIT OFFLINE</h1>
+    <p class="meta">Generado el: 24/04/2026 09:51</p>
+    <button class="print-btn" onclick="window.print()">📥 GUARDAR PDF / IMPRIMIR</button>
+
+    <h2>🆘 CONTACTOS DE EMERGENCIA</h2>
+    <div class="card emergency-card">
+        <span class="title">🏥 HOSPITALES (Siloam / Regional)</span>
+        <div class="meta"><b>Manado:</b> Siloam Hospitals Manado (+62 431 7290900)</div>
+        <div class="meta"><b>Kendari:</b> Siloam Hospitals Kendari (+62 401 3089000)</div>
+        <div class="meta"><b>Phuket:</b> Bangkok Hospital Phuket (+66 76 254 425)</div>
+        <div class="meta"><b>Kuala Lumpur:</b> Prince Court (+60 3-2160 0000)</div>
+    </div>
+    <div class="card emergency-card">
+        <span class="title">🛡️ SEGURO IATI (24h)</span>
+        <span class="meta">📞 +34 93 485 77 35 | Póliza: 17263544</span>
+    </div>
+    
+    <div class="card emergency-card">
+        <span class="title">Seguro IATI (24h)</span>
+        <span class="meta">📞 +34 93 485 77 35 | Póliza: 17263544</span>
+    </div>
+
+    <h2>✈️ CRONOGRAMA DE VIAJE</h2>
+    <h3>AGOSTO</h3>
+        <div class="card vuelo">
+            <span class="meta">2026-08-22</span>
+            <span class="title">Madrid (MAD) ➔ Doha (DOH) [QR152]</span>
+            <span class="meta">🕒 22:55 • ID: <span class='pnr'>8IFJXL</span></span>
+        </div>
+        
+        <div class="card vuelo">
+            <span class="meta">2026-08-23</span>
+            <span class="title">Doha (DOH) ➔ Phuket (HKT) [QR846]</span>
+            <span class="meta">🕒 07:50 • ID: <span class='pnr'>8IFJXL</span></span>
+        </div>
+        
+        <div class="card hotel">
+            <span class="meta">2026-08-23</span>
+            <span class="title">The Palmery Resort (Phuket)</span>
+            <span class="meta">🕒 Check-in • ID: <span class='pnr'>6467.258.869</span></span>
+        </div>
+        
+        <div class="card vuelo">
+            <span class="meta">2026-08-26</span>
+            <span class="title">Phuket (HKT) ➔ Kuala Lumpur (KUL) [AK821]</span>
+            <span class="meta">🕒 17:05 • ID: <span class='pnr'>D6MH6Y</span></span>
+        </div>
+        
+        <div class="card vuelo">
+            <span class="meta">2026-08-26</span>
+            <span class="title">Kuala Lumpur (KUL) ➔ Jakarta (CGK) [QZ211]</span>
+            <span class="meta">🕒 20:45 • ID: <span class='pnr'>D6MH6Y</span></span>
+        </div>
+        
+        <div class="card hotel">
+            <span class="meta">2026-08-26</span>
+            <span class="title">Orchardz Hotel Bandara (Yakarta)</span>
+            <span class="meta">🕒 Check-in • ID: <span class='pnr'>6085.746.278</span></span>
+        </div>
+        
+        <div class="card vuelo">
+            <span class="meta">2026-08-27</span>
+            <span class="title">Jakarta (CGK) ➔ Kendari (KDI) [QG330] - ¡SALIDA MADRUGADA!</span>
+            <span class="meta">🕒 03:50 • ID: <span class='pnr'>X9Y7FR</span></span>
+        </div>
+        
+        <div class="card hotel">
+            <span class="meta">2026-08-27</span>
+            <span class="title">Swiss-Belhotel Kendari</span>
+            <span class="meta">🕒 Check-in • ID: <span class='pnr'>6586.973.888</span></span>
+        </div>
+        
+        <div class="card vuelo">
+            <span class="meta">2026-08-28</span>
+            <span class="title">Kendari (KDI) ➔ Wakatobi (WNI) [FJY]</span>
+            <span class="meta">🕒 09:50 • ID: <span class='pnr'>VLJYPW</span></span>
+        </div>
+        
+        <div class="card hotel">
+            <span class="meta">2026-08-28</span>
+            <span class="title">Wakatobi Patuno Resort</span>
+            <span class="meta">🕒 Check-in • ID: <span class='pnr'>6802.943.058</span></span>
+        </div>
+        
+        <div class="card hotel">
+            <span class="meta">2026-08-29</span>
+            <span class="title">Marind Dive Eco Resort</span>
+            <span class="meta">🕒 Check-in • ID: <span class='pnr'>6391.871.976</span></span>
+        </div>
+        <h3>SEPTIEMBRE</h3>
+        <div class="card vuelo">
+            <span class="meta">2026-09-01</span>
+            <span class="title">Wakatobi (WNI) ➔ Kendari (KDI) [FlyJaya]</span>
+            <span class="meta">🕒 11:15 • ID: <span class='pnr'>JDHJBO</span></span>
+        </div>
+        
+        <div class="card vuelo">
+            <span class="meta">2026-09-01</span>
+            <span class="title">Kendari (KDI) ➔ Makassar (UPG) [JT]</span>
+            <span class="meta">🕒 14:30 • ID: <span class='pnr'>WYTGNW</span></span>
+        </div>
+        
+        <div class="card vuelo">
+            <span class="meta">2026-09-01</span>
+            <span class="title">Makassar (UPG) ➔ Manado (MDC) [JT]</span>
+            <span class="meta">🕒 17:35 • ID: <span class='pnr'>NHKRAH</span></span>
+        </div>
+        <h3>AGOSTO</h3>
+        <div class="card hotel">
+            <span class="meta">2026-08-31</span>
+            <span class="title">Dafuama Resort (Wanci)</span>
+            <span class="meta">🕒 Check-in • ID: <span class='pnr'>6575.038.363</span></span>
+        </div>
+        <h3>SEPTIEMBRE</h3>
+        <div class="card hotel">
+            <span class="meta">2026-09-01</span>
+            <span class="title">Swiss-Belhotel Maleosan Manado</span>
+            <span class="meta">🕒 Check-in • ID: <span class='pnr'>6181.809.235</span></span>
+        </div>
+        
+        <div class="card hotel">
+            <span class="meta">2026-09-02</span>
+            <span class="title">The Village Bunaken</span>
+            <span class="meta">🕒 Check-in • ID: <span class='pnr'>6184.208.706</span></span>
+        </div>
+        
+        <div class="card hotel">
+            <span class="meta">2026-09-05</span>
+            <span class="title">Murex Bangka Dive Resort</span>
+            <span class="meta">🕒 Check-in • ID: <span class='pnr'>5948.469.092</span></span>
+        </div>
+        
+        <div class="card hotel">
+            <span class="meta">2026-09-08</span>
+            <span class="title">Swiss-Belhotel Maleosan Manado (Regreso)</span>
+            <span class="meta">🕒 Check-in • ID: <span class='pnr'>5460.993.656</span></span>
+        </div>
+        
+        <div class="card vuelo">
+            <span class="meta">2026-09-12</span>
+            <span class="title">JT741</span>
+            <span class="meta">🕒 06:00 • ID: <span class='pnr'>HEDEFS</span></span>
+        </div>
+        
+        <div class="card vuelo">
+            <span class="meta">2026-09-12</span>
+            <span class="title">AK331</span>
+            <span class="meta">🕒 10:50 • ID: <span class='pnr'>EGY1YA</span></span>
+        </div>
+        
+        <div class="card hotel">
+            <span class="meta">2026-09-12</span>
+            <span class="title">citizenM Kuala Lumpur</span>
+            <span class="meta">🕒 Check-in • ID: <span class='pnr'>6935.104.420</span></span>
+        </div>
+        
+        <div class="card vuelo">
+            <span class="meta">2026-09-15</span>
+            <span class="title">Kuala Lumpur (KUL) ➔ Phuket (HKT) [AK824]</span>
+            <span class="meta">🕒 12:30 • ID: <span class='pnr'>DI6MWH</span></span>
+        </div>
+        
+        <div class="card hotel">
+            <span class="meta">2026-09-15</span>
+            <span class="title">Karon Phunaka Resort (Phuket)</span>
+            <span class="meta">🕒 Check-in • ID: <span class='pnr'>6575.038.363</span></span>
+        </div>
+        
+        <div class="card vuelo">
+            <span class="meta">2026-09-16</span>
+            <span class="title">Phuket (HKT) ➔ Doha (DOH) [QR847]</span>
+            <span class="meta">🕒 20:30 • ID: <span class='pnr'>8IFJXL</span></span>
+        </div>
+        
+        <div class="card vuelo">
+            <span class="meta">2026-09-17</span>
+            <span class="title">Doha (DOH) ➔ Madrid (MAD) [QR147]</span>
+            <span class="meta">🕒 01:25 • ID: <span class='pnr'>8IFJXL</span></span>
+        </div>
+        
+
+    <h2>🤿 SNORKEL INTEL (PUNTOS CLAVE)</h2>
+    
+        <div class="card">
+            <span class="title">📍 Parque Nacional Bunaken</span>
+            <div class="meta">Visibilidad: 20-35 metros | Peligro: Bajo (Cuidado con corrientes en las puntas de la pared)</div>
+            <div class="meta" style="margin-top:5px; font-style: italic;">"Snorkel ideal en marea alta muerta (slack high tide) para evitar sedimentos."</div>
+        </div>
+        
+        <div class="card">
+            <span class="title">📍 Wakatobi (Wangi-Wangi & Hoga)</span>
+            <div class="meta">Visibilidad: 30-50 metros (Excepcional) | Peligro: Muy Bajo</div>
+            <div class="meta" style="margin-top:5px; font-style: italic;">"Marea alta para entrar fácilmente sobre el arrecife desde la playa."</div>
+        </div>
+        
+        <div class="card">
+            <span class="title">📍 Isla Bangka (Norte de Sulawesi)</span>
+            <div class="meta">Visibilidad: 20-30 metros | Peligro: Medio (Corrientes variables)</div>
+            <div class="meta" style="margin-top:5px; font-style: italic;">"Consultar con el resort; las corrientes pueden ser fuertes entre islas."</div>
+        </div>
+        
+        <div class="card">
+            <span class="title">📍 Phuket (Kata/Karon)</span>
+            <div class="meta">Visibilidad: 5-15 metros (Variable por lluvias) | Peligro: Alto (Resacas fuertes en época de monzón)</div>
+            <div class="meta" style="margin-top:5px; font-style: italic;">"SOLO snorkel en días de bandera verde. Evitar con bandera roja (corrientes de resaca)."</div>
+        </div>
+        
+
+    <script>
+        console.log("Kit Offline Cargado Correctamente");
+    </script>
+</body>
+</html>

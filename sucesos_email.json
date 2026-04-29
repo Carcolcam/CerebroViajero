@@ -1,0 +1,24 @@
+[
+    {
+        "id": "LAB_V1",
+        "asunto": "Confirmacion de Vuelo Iberia MAD-JFK PNR: MNYC11",
+        "preview": "Tu vuelo con destino Nueva York ha sido confirmado.",
+        "type": "flight",
+        "date": "2026-06-01",
+        "from_city": "Madrid",
+        "to_city": "Nueva York",
+        "dep_time": "10:00",
+        "arr_time": "14:00"
+    },
+    {
+        "id": "LAB_V2",
+        "asunto": "Vuelo Delta JFK-LAX PNR: DLAX33",
+        "preview": "Salida desde JFK Terminal 4.",
+        "type": "flight",
+        "date": "2026-06-05",
+        "from_city": "Nueva York",
+        "to_city": "Los Angeles",
+        "dep_time": "09:00",
+        "arr_time": "12:00"
+    }
+]

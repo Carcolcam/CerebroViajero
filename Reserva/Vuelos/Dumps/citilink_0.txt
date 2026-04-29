@@ -1,0 +1,22 @@
+SUBJECT: Dear Mr. Carlos Collado, Thank you for contacting Citilink Customer care. Regarding your request, please kindly contact your travel agent based on your initial booking. Thus conveyed, thank you for
+----------------------------------------
+MIME: text/plain
+Dear Mr. Carlos Collado,
+
+Thank you for contacting Citilink Customer care.
+
+
+Regarding your request, please kindly contact your travel agent based on your initial booking.
+
+
+Thus conveyed, thank you for choosing Citilink as your airline.
+
+Best regards,
+
+Customer Care
+
+CITILINK INDONESIA
+========================================
+MIME: text/html
+&nbsp; Dear Mr. Carlos Collado , &nbsp; Thank you for contacting Citilink C ustomer care. &nbsp; &nbsp; Regarding your request, please kindly contact your travel agent based on your initial booking. &nbsp; Thus conveyed, thank you for choosing Cit i link as your airline. &nbsp; Best regards, &nbsp; Customer Care &nbsp; CITILINK INDONESIA &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+========================================

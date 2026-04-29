@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sentinel - Journey Timeline</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* ... keeping existing styles ... */
+        :root {
+            --bg-deep: #050507;
+            --accent-cyan: #00f2ff;     /* Vuelos */
+            --accent-blue: #3b82f6;     /* Hoteles */
+            --accent-green: #00ff88;    /* Actividades / Snorkel */
+            --accent-purple: #b042ff;   /* Traslados */
+            --accent-teal: #00b4d8;     /* Ferris */
+            --accent-red: #ff3b3b;      /* Alertas / Cancelaciones */
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.07);
+            --text-main: #ffffff;
+            --text-dim: #8e8e93;
+            --font-main: 'Outfit', sans-serif;
+            --neon-glow: 0 0 15px rgba(0, 242, 255, 0.4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-main); -webkit-tap-highlight-color: transparent; outline: none; }
+        body { 
+            background: var(--bg-deep); 
+            color: var(--text-main); 
+            overflow-x: hidden; 
+            min-height: 100vh;
+            padding-bottom: calc(90px + env(safe-area-inset-bottom));
+        }
+
+        .app-container { padding: 40px 5%; max-width: 1400px; margin: 0 auto; }
+        @media (max-width: 900px) {
+            .app-container { padding: 0 20px; }
+        }
+
+        .view { display: none; animation: fadeIn 0.4s ease-out; }
+        .view.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .hud-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+        }
+        .hud-header h1 { font-size: 19px; font-weight: 800; letter-spacing: -0.5px; opacity: 0.9; margin: 0; }
+        .logo-wrap { display: flex; align-items: center; gap: 10px; }
+        .logo-wrap i { color: var(--accent-cyan); filter: drop-shadow(var(--neon-glow)); }
+
+        .timeline-container { position: relative; padding-left: 32px; margin-top: 20px; }
+        .timeline-line { position: absolute; left: 7px; top: 0; width: 2px; height: 100%; background: linear-gradient(to bottom, var(--accent-cyan), var(--glass-border) 80%); }
+        
+        .timeline-item { position: relative; margin-bottom: 40px; }
+        .timeline-dot { position: absolute; left: -32px; top: 0; width: 16px; height: 16px; background: var(--bg-deep); border: 3px solid var(--accent-cyan); border-radius: 50%; z-index: 2; box-shadow: var(--neon-glow); transition: 0.3s; }
+        .timeline-item.past .timeline-dot { border-color: var(--text-dim); box-shadow: none; }
+        
+        .timeline-card {
+            background: rgba(255, 255, 255, 0.02); border: 1px solid var(--glass-border);
+            border-radius: 20px; padding: 18px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1); 
+            cursor: pointer; position: relative; overflow: hidden;
+            max-height: 110px;
+        }
+        .timeline-card.expanded { max-height: 1000px; background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.15); }
+        .timeline-card:active { transform: scale(0.99); }
+        .timeline-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--text-dim); border-radius: 4px 0 0 4px;
+        }
+        .timeline-card.type-flight::before { background: var(--accent-cyan); }
+        .timeline-card.type-hotel::before { background: var(--accent-blue); }
+        .timeline-card.type-transfer::before { background: var(--accent-purple); }
+        .timeline-card.type-ferry::before { background: var(--accent-teal); }
+        .timeline-card.type-activity::before { background: var(--accent-green); }
+        
+        .timeline-card.status-CANCELLED { opacity: 0.6; }
+        .timeline-card.status-CANCELLED::before { background: var(--accent-red); }
+        .timeline-card.status-CANCELLED .item-title { text-decoration: line-through; }
+
+        .card-body { 
+            opacity: 0; transform: translateY(-10px); transition: 0.3s; pointer-events: none;
+            margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px;
+        }
+        .timeline-card.expanded .card-body { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+        .expand-icon { position: absolute; top: 18px; right: 18px; color: var(--text-dim); transition: 0.3s; }
+        .timeline-card.expanded .expand-icon { transform: rotate(180deg); color: var(--accent-cyan); }
+
+        .item-type { font-size: 10px; font-weight: 800; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+        .item-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 4px; padding-right: 25px; }
+        .item-time { font-size: 12px; color: var(--text-dim); display: flex; align-items: center; gap: 6px; }
+        .item-pnr { font-family: 'JetBrains Mono'; font-size: 11px; background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px; color: var(--accent-cyan); margin-top: 8px; display: inline-block; }
+
+        /* Bottom Nav (Tab Bar Premium) */
+        .bottom-nav {
+            display: flex;
+            position: fixed;
+            bottom: env(safe-area-inset-bottom, 20px);
+            left: 15px;
+            right: 15px;
+            background: rgba(13, 15, 18, 0.95);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 12px 0;
+            justify-content: space-around;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .nav-item.active { color: var(--accent-cyan); }
+        .nav-label { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px);
+            z-index: 9999; display: none; align-items: flex-end; justify-content: center;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-content {
+            background: var(--bg-deep); width: 100%; max-width: 480px;
+            border-radius: 24px 24px 0 0; border: 1px solid var(--glass-border);
+            padding: 30px; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-height: 80vh; overflow-y: auto;
+        }
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+        .modal-close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 50%; width: 32px; height: 32px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .modal-header { font-size: 20px; font-weight: 800; margin-bottom: 10px; padding-right: 30px; }
+        .modal-meta { font-size: 13px; color: var(--accent-cyan); margin-bottom: 20px; font-family: 'JetBrains Mono'; }
+        .modal-body { font-size: 14px; color: var(--text-dim); line-height: 1.6; }
+        .status-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; margin-top: 15px; }
+        .status-CONFIRMED { background: rgba(0, 255, 136, 0.1); color: var(--accent-green); }
+        .status-CANCELLED { background: rgba(255, 59, 59, 0.1); color: var(--accent-red); }
+        .status-CHANGED { background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); }
+        
+        /* Friction and Map UI */
+        .friction-widget { margin-top: 15px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 12px; border: 1px solid var(--glass-border); display: flex; flex-direction: column; gap: 8px;}
+        .friction-row { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-dim); align-items: center; }
+        .friction-row span.highlight { color: #fff; font-family: 'JetBrains Mono'; font-weight: 700; }
+        .map-thumbnail { width: 100%; height: 70px; background: url('https://upload.wikimedia.org/wikipedia/commons/e/e0/Google_Maps_Night_Mode_Sample.png') center/cover; border-radius: 8px; border: 1px solid var(--glass-border); margin-top: 8px; opacity: 0.8; transition: 0.3s; }
+        .map-thumbnail:hover { opacity: 1; border-color: var(--accent-cyan); }
+        
+        /* Critical Alert UI */
+        .critical-alert { margin-top: 15px; padding: 12px; background: rgba(255, 59, 59, 0.1); border-left: 3px solid var(--accent-red); border-radius: 0 12px 12px 0; font-size: 12px; color: #ffcccc; display: flex; gap: 10px; align-items: flex-start; }
+        
+        /* Gadget Bar */
+        .gadget-bar { margin-top: 15px; display: flex; gap: 8px; }
+        .gadget-btn { background: var(--bg-deep); border: 1px solid var(--glass-border); border-radius: 20px; padding: 6px 12px; font-size: 11px; color: var(--text-dim); display: flex; align-items: center; gap: 6px; transition: 0.3s; }
+        .gadget-btn:hover { color: var(--accent-cyan); border-color: var(--accent-cyan); background: rgba(0, 242, 255, 0.05); }
+
+        /* Modal Widgets Hub */
+        .widget-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 24px;
+        }
+        .widget-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 16px;
+            transition: 0.3s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .widget-card:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 242, 255, 0.05);
+            transform: translateY(-2px);
+        }
+        .widget-icon {
+            color: var(--accent-cyan);
+            margin-bottom: 4px;
+        }
+        .widget-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .widget-value {
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+        .widget-card.weather-card {
+            grid-column: span 2;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.02), rgba(0, 242, 255, 0.05));
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- VIEW 1: TIMELINE -->
+        <section id="v-timeline" class="view active">
+        <header class="hud-header">
+            <div class="logo-wrap">
+                <i data-lucide="shield"></i>
+                <h1>Sentinel</h1>
+            </div>
+            <div id="today-label" style="font-size: 10px; color: var(--text-dim); letter-spacing: 1px;">CARGANDO ITINERARIO...</div>
+        </header>
+
+            <div class="timeline-container" id="timeline-render">
+                <div class="timeline-line"></div>
+                <!-- Render dinámico -->
+                <div style="text-align:center; padding: 40px; color: var(--text-dim);">Sincronizando reservas...</div>
+            </div>
+        </section>
+
+        <!-- DASHBOARD VIEW -->
+        <section id="v-dash" class="view">
+            <header class="header"><div class="logo-wrap"><i data-lucide="shield-check"></i><h1>Nexus Control</h1></div></header>
+            <div id="alerts-render" style="padding: 10px;">
+                <div style="text-align:center; padding: 40px; color: var(--text-dim);">Sincronizando con Sentinel AI...</div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Bottom Nav (Tab Bar Premium) -->
+    <nav class="bottom-nav">
+        <a href="centro_de_mando.html" class="nav-item">
+            <i data-lucide="layout-dashboard" style="width: 20px;"></i>
+            <span class="nav-label">Hoy</span>
+        </a>
+        <a href="#top" class="nav-item active">
+            <i data-lucide="calendar-days" style="width: 20px;"></i>
+            <span class="nav-label">Plan</span>
+        </a>
+    </nav>
+
+    <!-- Modal for details -->
+    <div class="modal-overlay" id="detail-modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal(event)"><i data-lucide="x" style="width:16px;"></i></button>
+            <div class="modal-header" id="modal-title">Título</div>
+            <div class="modal-meta" id="modal-meta">Meta</div>
+            <div class="modal-body" id="modal-desc">Detalles...</div>
+            <div id="modal-status"></div>
+            
+            <!-- Contenedor dinámico para Widgets -->
+            <div id="modal-widgets"></div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        let globalItinerary = [];
+
+        function toggleCard(el) {
+            const isExpanded = el.classList.contains('expanded');
+            // Cerrar otros si se desea, pero para viajes es mejor dejar varios abiertos
+            // document.querySelectorAll('.timeline-card').forEach(c => c.classList.remove('expanded'));
+            if (!isExpanded) el.classList.add('expanded');
+            else el.classList.remove('expanded');
+        }
+
+        async function fetchItinerary() {
+            try {
+                const res = await fetch('itinerario_maestro.json?t=' + Date.now());
+                const data = await res.json();
+                
+                // El Tejedor ya lo ordena y purga, así que lo cogemos tal cual.
+                globalItinerary = data.itinerary;
+
+                document.getElementById('today-label').innerText = "VIAJE 2026 • " + globalItinerary.length + " EVENTOS";
+                renderTimeline();
+            } catch(e) {
+                console.error("Error loading itinerary:", e);
+                document.getElementById('timeline-render').innerHTML = `<div style="color:var(--accent-red); padding: 20px;">Error cargando itinerario maestro.</div>`;
+            }
+        }
+
+        function openModal(index) {
+            const item = globalItinerary[index];
+            if(!item) return;
+
+            document.getElementById('modal-title').innerText = item.title;
+            document.getElementById('modal-meta').innerText = `${item.date} • PNR: ${item.id}`;
+            document.getElementById('modal-desc').innerText = "Proveedor: " + item.provider;
+            document.getElementById('modal-status').innerHTML = `<span class="status-badge status-${item.status}">${item.status}</span>`;
+
+            // Inyectar Widgets si es un Hotel (Destino)
+            const widgetsContainer = document.getElementById('modal-widgets');
+            if (item.type === 'hotel') {
+                widgetsContainer.innerHTML = `
+                    <div class="widget-grid">
+                        <div class="widget-card weather-card">
+                            <div style="display:flex; align-items:center; gap: 12px;">
+                                <i data-lucide="sun" style="width: 24px; color: #fbbf24;"></i>
+                                <div>
+                                    <div class="widget-title">Clima en Destino</div>
+                                    <div class="widget-value">Soleado, 28°C • Viento 12km/h</div>
+                                </div>
+                            </div>
+                            <i data-lucide="chevron-right" style="color:var(--text-dim); width: 16px;"></i>
+                        </div>
+                        
+                        <div class="widget-card">
+                            <div class="widget-icon"><i data-lucide="utensils" style="width: 20px;"></i></div>
+                            <div class="widget-title">Foodie Radar</div>
+                            <div class="widget-value">3 Reservas activas</div>
+                        </div>
+
+                        <div class="widget-card">
+                            <div class="widget-icon"><i data-lucide="fish" style="width: 20px;"></i></div>
+                            <div class="widget-title">Snorkel Kit</div>
+                            <div class="widget-value">Condiciones Óptimas</div>
+                        </div>
+
+                        <div class="widget-card" style="grid-column: span 2;">
+                            <div class="widget-icon"><i data-lucide="map-pin" style="width: 20px;"></i></div>
+                            <div class="widget-title">Lugares de Interés Mapeados</div>
+                            <div class="widget-value">Abrir Sentinel Maps Overlay</div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                widgetsContainer.innerHTML = ''; // Limpiar si es un vuelo u otra cosa
+            }
+
+            const modal = document.getElementById('detail-modal');
+            modal.classList.add('active');
+            lucide.createIcons();
+        }
+
+        function closeModal(e) {
+            if(e) e.preventDefault();
+            const modal = document.getElementById('detail-modal');
+            modal.classList.remove('active');
+        }
+
+        function renderTimeline() {
+            const container = document.getElementById('timeline-render');
+            if(globalItinerary.length === 0) {
+                container.innerHTML = '<div style="color:var(--text-dim); padding: 20px;">No hay eventos en el itinerario.</div>';
+                return;
+            }
+            
+            container.innerHTML = '<div class="timeline-line"></div>' + globalItinerary.map((item, idx) => {
+                const dateStr = item.date.includes('-') && !item.date.includes('00') ? 
+                    new Date(item.date).toLocaleDateString('es-ES', {day:'numeric', month:'short'}).toUpperCase() : 
+                    item.date;
+                
+                let icon = 'circle';
+                let themeColor = 'dim';
+                
+                if (item.type === 'flight') { icon = 'plane'; themeColor = 'cyan'; }
+                else if (item.type === 'hotel') { icon = 'building'; themeColor = 'blue'; }
+                else if (item.type === 'transfer') { icon = 'car'; themeColor = 'purple'; }
+                else if (item.type === 'ferry') { icon = 'ship'; themeColor = 'teal'; }
+                else if (item.type === 'activity') { icon = 'ticket'; themeColor = 'green'; }
+                
+                let eventTimeStr = '';
+                if (item.type === 'flight' && item.flight_info && item.flight_info.scheduled_departure) {
+                    eventTimeStr = ' • ' + item.flight_info.scheduled_departure.split('T')[1]?.substring(0,5) || '15:00';
+                } else if (item.time && item.time !== '00:00' && item.time !== 'N/A') {
+                    eventTimeStr = ' • ' + item.time;
+                }
+                
+                let bodyHtml = '';
+                
+                // Friction Widget
+                if (item.friction_logistics) {
+                    const f = item.friction_logistics;
+                    const leaveTime = f.leave_hotel_at ? (f.leave_hotel_at.split('T')[1] || f.leave_hotel_at.split(' ')[1] || '08:00').substring(0,5) : '--:--';
+                    const arriveTime = f.arrive_hotel_at ? (f.arrive_hotel_at.split('T')[1] || f.arrive_hotel_at.split(' ')[1] || '20:00').substring(0,5) : '--:--';
+                    
+                    bodyHtml += `
+                        <div class="friction-widget">
+                            <div class="friction-row">
+                                <span><i data-lucide="car" style="width:12px; display:inline-block; vertical-align:middle;"></i> Taxi recomendado</span>
+                                <span class="highlight">${leaveTime}</span>
+                            </div>
+                            <div class="friction-row">
+                                <span><i data-lucide="door-open" style="width:12px; display:inline-block; vertical-align:middle;"></i> Llegada al hotel</span>
+                                <span class="highlight">${arriveTime}</span>
+                            </div>
+                            <div class="map-thumbnail" title="Abrir en Maps"></div>
+                        </div>
+                    `;
+                }
+                
+                // Alerts
+                if (item.alerts && item.alerts.length > 0) {
+                    item.alerts.forEach(al => {
+                        bodyHtml += `
+                            <div class="critical-alert">
+                                <i data-lucide="alert-triangle" style="width:16px; flex-shrink:0;"></i>
+                                <div>${al.message}</div>
+                            </div>
+                        `;
+                    });
+                }
+                
+                if (item.type === 'hotel') {
+                    bodyHtml += `
+                        <div class="gadget-bar">
+                            <div class="gadget-btn"><i data-lucide="fish" style="width:12px;"></i> Snorkel</div>
+                            <div class="gadget-btn"><i data-lucide="utensils" style="width:12px;"></i> Foodie</div>
+                        </div>
+                    `;
+                }
+
+                return `
+                    <div class="timeline-item">
+                        <div class="timeline-dot" style="border-color: var(--accent-${themeColor})"></div>
+                        <div class="timeline-card type-${item.type} status-${item.status}" onclick="toggleCard(this)">
+                            <i data-lucide="chevron-down" class="expand-icon" style="width:16px;"></i>
+                            <div class="card-header">
+                                <div class="item-type" style="color: var(--accent-${themeColor});">
+                                    <i data-lucide="${icon}" style="width:12px;"></i> 
+                                    ${dateStr}
+                                </div>
+                                <div class="item-title">${item.title}</div>
+                                <div class="item-time">
+                                    ${item.provider}${eventTimeStr}
+                                </div>
+                            </div>
+                            
+                            <div class="card-body">
+                                <div class="item-pnr">ID / PNR: ${item.id}</div>
+                                <div style="font-size:12px; color:var(--text-dim); margin-top:10px;">
+                                    Estado: <span style="color:#fff; font-weight:700;">${item.status}</span>
+                                </div>
+                                ${bodyHtml}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        async function loadSentinelAlerts() {
+            try {
+                const res = await fetch('alertas_sentinel.json?t=' + Date.now());
+                const data = await res.json();
+                const render = document.getElementById('alerts-render');
+                
+                if (data.alerts && data.alerts.length > 0) {
+                    render.innerHTML = data.alerts.map(al => `
+                        <div class="timeline-card" style="margin-bottom:15px; border-left: 3px solid var(--accent-red);">
+                            <div class="item-type" style="color: var(--accent-red);">ALERTA SENTINEL</div>
+                            <div class="item-title" style="font-size:14px;">${al.subject}</div>
+                            <div class="item-time">${al.date}</div>
+                        </div>
+                    `).join('');
+                } else {
+                     render.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--text-dim);">No hay alertas activas.</div>';
+                }
+            } catch(e) { console.log("Sentinel Offline"); }
+        }
+
+        function switchView(id, btn) {
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById('v-' + id).classList.add('active');
+            if(id === 'dash') loadSentinelAlerts();
+            lucide.createIcons();
+        }
+
+        window.onload = () => {
+            fetchItinerary();
+        };
+    </script>
+</body>
+</html>

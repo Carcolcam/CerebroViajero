@@ -1,0 +1,25 @@
+{
+    "root": "1d6MJQWSNg0GVuRGAeQQkDevI-ua1WWyH",
+    "operaciones": {
+        "id": "111Ff-kvMIsUu8moUu3ozdKty9m5rH44x",
+        "sub": {
+            "plan_activo": "1s6_FpDHA6DT5r1DpJEt3jQQUWs8TbjYg",
+            "zona_crisis": {
+                "id": "1CM6w-Lnuq2IDk9xXFI6O04KXghtKIOtK",
+                "pendiente": "1JlcGYdXKZT2I3f3g11lraNBAhs7OPnUo",
+                "reembolsado": "1E93h6PT2McauY0wzXJ3uMJWyQMTonZcn"
+            },
+            "legal": "13YXC_8EajcaJAPg6PascvdiOB9H9tT0L"
+        }
+    },
+    "exploracion": {
+        "id": "1WE82Z4NRpdSCP-_YOJQJvvUuov8_k-tq",
+        "sub": {
+            "drone": "1h4HgrA-imrkIukidAlm0wuy8dcT7LfYk",
+            "snorkel": "11sOqtBTIItOcSDNUx1X27pKnPWT-XZSf",
+            "multimedia": "1tLg-6Lg65y7IQAG7jdAHfQzqR-JEkcP6",
+            "gastronomia": "1snioRKD16aTIyixUl6feYrN5vNDNXFad",
+            "cultura": "1sjcQp6nZs8Om2YcH3n_N5Yvfv771atca"
+        }
+    }
+}

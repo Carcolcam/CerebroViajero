@@ -1,0 +1,17 @@
+{
+  "name": "Sentinel Logistics",
+  "short_name": "Sentinel",
+  "description": "Autonomous Travel Logistics Management",
+  "start_url": "centro_de_mando.html",
+  "display": "standalone",
+  "background_color": "#050507",
+  "theme_color": "#00f2ff",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/9334/9334534.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

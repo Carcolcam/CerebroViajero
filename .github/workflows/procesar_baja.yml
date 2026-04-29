@@ -1,0 +1,38 @@
+name: Procesar Baja Logística
+
+on:
+  workflow_dispatch:
+    inputs:
+      booking_id:
+        description: 'PNR o Identificador de la reserva a cancelar'
+        required: true
+      provider:
+        description: 'Nombre del proveedor (ej. Singapore Airlines)'
+        required: true
+
+jobs:
+  procesar_baja:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout repositorio
+      uses: actions/checkout@v3
+
+    - name: Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Ejecutar motor de baja
+      run: |
+        python procesar_baja.py "${{ github.event.inputs.booking_id }}" "${{ github.event.inputs.provider }}"
+
+    - name: Guardar cambios en la base de datos
+      run: |
+        git config --global user.name "CerebroViajero Bot"
+        git config --global user.email "bot@cerebroviajero.com"
+        git add itinerario_maestro.json alertas_sentinel.json
+        git commit -m "🚨 BAJA PROCESADA: Reserva ${{ github.event.inputs.booking_id }} cancelada desde móvil" || echo "No hay cambios que guardar"
+        git push

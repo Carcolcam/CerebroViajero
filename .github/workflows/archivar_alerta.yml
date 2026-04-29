@@ -1,0 +1,35 @@
+name: Archivar Alertas Gestionadas
+
+on:
+  workflow_dispatch:
+    inputs:
+      alert_ids:
+        description: 'Lista de IDs de alertas a archivar (separados por espacio)'
+        required: true
+
+jobs:
+  archivar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout repositorio
+      uses: actions/checkout@v3
+
+    - name: Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Ejecutar archivado
+      run: |
+        python archivar_alerta.py ${{ github.event.inputs.alert_ids }}
+
+    - name: Guardar cambios
+      run: |
+        git config --global user.name "CerebroViajero Bot"
+        git config --global user.email "bot@cerebroviajero.com"
+        git add alertas_sentinel.json
+        git commit -m "♻️ GESTIÓN REMOTA: Alertas archivadas desde dispositivo móvil" || echo "No hay cambios"
+        git push

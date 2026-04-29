@@ -1,0 +1,22 @@
+{
+  "destinations": {
+    "Indonesia": {
+      "comer": [
+        {"name": "Warung Makan Bu Rus", "city": "Ubud", "description": "Auténtica comida balinesa en un jardín tranquilo.", "added_by": "IA", "status": "PENDING"},
+        {"name": "Clear Cafe", "city": "Ubud", "description": "Opciones saludables y vistas increíbles.", "added_by": "User", "status": "APPROVED"},
+        {"name": "Nasi Ayam Kedewatan Ibu Mangku", "city": "Ubud", "description": "El mejor Nasi Ayam de la isla.", "added_by": "IA", "status": "PENDING"},
+        {"name": "Locavore", "city": "Ubud", "description": "Experiencia gastronómica de alto nivel con ingredientes locales.", "added_by": "IA", "status": "PENDING"}
+      ],
+      "snorkel": [
+        {"name": "Blue Lagoon", "city": "Padangbai", "description": "Aguas cristalinas y mucha vida marina.", "added_by": "IA", "status": "PENDING"},
+        {"name": "Tulamben (USAT Liberty Shipwreck)", "city": "Tulamben", "description": "Pecio de la II Guerra Mundial accesible haciendo snorkel.", "added_by": "IA", "status": "PENDING"},
+        {"name": "Menjangan Island", "city": "West Bali", "description": "Paredes de coral espectaculares y tortugas.", "added_by": "IA", "status": "PENDING"}
+      ],
+      "traductor": {
+        "Gracias": "Terima Kasih",
+        "Hola": "Halo / Selamat Siang",
+        "La cuenta, por favor": "Minta tagihan"
+      }
+    }
+  }
+}

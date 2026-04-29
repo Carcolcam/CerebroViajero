@@ -1,0 +1,53 @@
+name: Sentinel Logistics Automation
+
+on:
+  schedule:
+    - cron: '*/15 * * * *' # Cada 15 minutos
+  workflow_dispatch: # Permite ejecución manual
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: true
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          pip install msal requests python-dotenv
+
+      - name: Run Sentinel Automation
+        env:
+          HOTMAIL_EMAIL: ${{ secrets.HOTMAIL_EMAIL }}
+          HOTMAIL_CLIENT_ID: ${{ secrets.HOTMAIL_CLIENT_ID }}
+          HOTMAIL_CLIENT_SECRET: ${{ secrets.HOTMAIL_CLIENT_SECRET }}
+          HOTMAIL_REFRESH_TOKEN: ${{ secrets.HOTMAIL_REFRESH_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          DASHBOARD_URL: ${{ secrets.DASHBOARD_URL }}
+        run: |
+          echo "[1/3] Cazando hilos desde Hotmail..."
+          python cazador_hilos.py
+          echo "[2/3] Tejiendo itinerario maestro..."
+          python tejedor_itinerario.py
+          echo "[3/3] Ejecutando Vigilante Sentinel..."
+          python vigilante_telegram.py
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "Sentinel Bot"
+          git config --global user.email "sentinel@cerebroviajero.ai"
+          git add itinerario_maestro.json alertas_sentinel.json 2>/dev/null || true
+          git add estado_vigilante.json sucesos_email.json 2>/dev/null || true
+          git commit -m "Sentinel Sync: Actualización automática de logística [skip ci]" || echo "No changes to commit"
+          git push
